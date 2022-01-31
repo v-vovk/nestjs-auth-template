@@ -9,7 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
-import { AtGuard, RtGuard } from '../common/guards';
+import { AccessTokenGuard, RefreshTokenGuard } from '../common/guards';
 import { GetCurrentUser, GetCurrentUserId } from '../common/decorators';
 
 @Controller('auth')
@@ -28,14 +28,14 @@ export class AuthController {
     return this.authService.signinLocal(dto);
   }
 
-  @UseGuards(AtGuard)
+  @UseGuards(AccessTokenGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number) {
     return this.authService.logout(userId);
   }
 
-  @UseGuards(RtGuard)
+  @UseGuards(RefreshTokenGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(
